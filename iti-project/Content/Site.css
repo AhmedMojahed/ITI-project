@@ -103,3 +103,9 @@ textarea {
     height: 50px;
     width: 50px;
 }
+
+.text-bg-transparent{
+    background-color : black ;
+
+    color:white;
+}
