@@ -391,20 +391,15 @@ namespace iti_project.Controllers
         {
             if (id != null)
             {
-                if (id != null)
+                var userId = User.Identity.GetUserId();
+                var user = _context.Users.Include("Courses").SingleOrDefault(u => u.Id == userId);
+                var course = _context.Courses.SingleOrDefault(c => c.ID == id);
+                if (course != null && user != null)
                 {
-                    var userId = User.Identity.GetUserId();
-                    var user = _context.Users.Include("Courses").SingleOrDefault(u => u.Id == userId);
-                    var course = _context.Courses.SingleOrDefault(c => c.ID == id);
-                    if (course != null && user != null)
-                    {
-                        user.Courses.Remove(course);
-                        _context.SaveChanges();
-                        return RedirectToAction("Index", "Account");
-                    }
+                    user.Courses.Remove(course);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index", "Account");
                 }
-                return RedirectToAction("Index", "Account");
-
             }
             return RedirectToAction("Index", "Account");
         }

@@ -26,7 +26,7 @@
                             <p class="card-text">@item.Description</p>
                         </div>
                         <div class="card-footer">
-                            @Html.ActionLink("Unregister", "Unregister", "Courses", routeValues: null, htmlAttributes: new { @class = "btn btn-danger" })
+                            @Html.ActionLink("Unregister", "UnregisterCourse", "Manage", routeValues: new { id = item.ID}, htmlAttributes: new { @class = "btn btn-danger" })
                         </div>
                     </div>
                 </div>
