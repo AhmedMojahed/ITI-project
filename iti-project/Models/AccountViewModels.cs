@@ -62,6 +62,16 @@ namespace iti_project.Models
         public bool RememberMe { get; set; }
     }
 
+
+    public class UserHomeViewModel
+    {
+        public string UserName { get; set; }
+        public string ImgPath { get; set; }
+        public string Email { get; set; }
+
+        public IList<Course> Courses { get; set; }
+
+    }
     public class RegisterViewModel
     {
         [Required]

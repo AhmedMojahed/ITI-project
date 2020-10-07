@@ -1,0 +1,36 @@
+﻿@model iti_project.Models.UserHomeViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@Html.Partial("_UserInfo")
+
+<h2>My Courses</h2>
+
+<div class="container">
+    <div class="row">
+        @if (Model.Courses.Count() == 0)
+        {
+            <p>You haven't registered in any courses yet.</p>
+        }
+        else
+        {
+
+            foreach (var item in Model.Courses)
+            {
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <h4 class="card-header">@item.Name</h4>
+                        <div class="card-body">
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                        <div class="card-footer">
+                            @Html.ActionLink("Unregister", "Unregister", "Courses", routeValues: null, htmlAttributes: new { @class = "btn btn-danger" })
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

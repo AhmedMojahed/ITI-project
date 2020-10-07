@@ -1,0 +1,30 @@
+﻿
+@model iti_project.Models.UserHomeViewModel
+@if (Request.IsAuthenticated)
+{
+    <!--start sidepanel-->
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <img class="img-fluid" src="@Url.Content(Model.ImgPath)" />
+        <h3>
+            @Html.ActionLink(Model.UserName, "Index", "Manage")
+        </h3>
+        <h3>
+            @Html.ActionLink(Model.Email, "Index", "Manage")
+        </h3>
+    </div>
+
+    <button class="openbtn" onclick="openNav()">&#9776; username info</button>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidepanel").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidepanel").style.width = "0";
+        }
+    </script>
+    <!--end sidepanel-->
+}
+
