@@ -1,0 +1,36 @@
+﻿@model IList<iti_project.Models.Department>
+@{
+    ViewBag.Title = "Departments";
+}
+
+<h2>Departments</h2>
+<hr />
+<br />
+
+<!--start page content-->
+<div class="container">
+    <div class="row">
+        @if (Model.Count() == 0)
+        {
+            <p>There is No Departments yet.</p>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <h4 class="card-header">@item.Name</h4>
+                        <div class="card-body">
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                        <div class="card-footer">
+                            @Html.ActionLink("Learn More", "Details", "Departments", routeValues: new { id = item.ID }, htmlAttributes: new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+

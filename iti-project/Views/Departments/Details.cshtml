@@ -1,0 +1,38 @@
+﻿@model iti_project.Models.Department
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h2>@Model.Name</h2>
+        <br />
+        <h4>@Model.Description</h4>
+    </div>
+    <hr />
+
+    <div class="row">
+        @if (Model.Courses.Count() == 0)
+        {
+            <p>You haven't registered in any courses yet.</p>
+        }
+        else
+        {
+
+            foreach (var item in Model.Courses)
+            {
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <h4 class="card-header">@item.Name</h4>
+                        <div class="card-body">
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                        <div class="card-footer">
+                            @Html.ActionLink("Learn More", "Details", "Courses", routeValues: new { id = item.ID }, htmlAttributes: new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
