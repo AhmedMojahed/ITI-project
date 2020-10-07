@@ -75,6 +75,11 @@ namespace iti_project.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+        [Display(Name = "Profile Picture")]
+        public string ImgPath { get; set; }
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

@@ -16,7 +16,7 @@ namespace iti_project.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        private ApplicationDbContext _context = new ApplicationDbContext();
         public ManageController()
         {
         }
@@ -366,6 +366,54 @@ namespace iti_project.Controllers
                 }
             }
             return View();
+        }
+
+
+        public ActionResult RegisterCourse(int? id)
+        {
+            if (id != null)
+            {
+                var user = UserManager.FindById(User.Identity.GetUserId());
+                var course = _context.Courses.SingleOrDefault(c => c.ID == id);
+                if (course != null)
+                {
+                    user.Courses.Add(course);
+                    var result = UserManager.Update(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Account");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
+                }
+            }
+            return RedirectToAction("Index", "Account");
+        }
+
+        public ActionResult UnregisterCourse(int? id)
+        {
+            if (id != null)
+            {
+                var user = UserManager.FindById(User.Identity.GetUserId());
+                var course = _context.Courses.SingleOrDefault(c => c.ID == id);
+                if (course != null)
+                {
+                    user.Courses.Remove(course);
+                    var result = UserManager.Update(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Account");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
+                }
+
+            }
+            return RedirectToAction("Index", "Account");
         }
 
         #endregion

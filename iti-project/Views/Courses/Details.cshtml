@@ -12,7 +12,14 @@
         <p class="card-text">@Model.Description</p>
     </div>
     <div class="card-footer">
-        @Html.ActionLink("Register", "Register", "Manage", routeValues: new { id = Model.ID }, htmlAttributes: new { @class = "btn btn-primary" })
+        @if (Request.IsAuthenticated)
+        {
+            @Html.ActionLink("Register", "RegisterCourse", "Manage", routeValues: new { id = Model.ID }, htmlAttributes: new { @class = "btn btn-primary" })
+        }
+        else
+        {
+            @Html.ActionLink("Register", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })
+        }
     </div>
 </div>
 
