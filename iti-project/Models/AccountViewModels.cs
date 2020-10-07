@@ -41,6 +41,7 @@ namespace iti_project.Models
 
     public class ForgotViewModel
     {
+
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -48,6 +49,7 @@ namespace iti_project.Models
 
     public class LoginViewModel
     {
+
         [Required]
         [Display(Name = "Email")]
         [EmailAddress]
@@ -65,6 +67,10 @@ namespace iti_project.Models
 
     public class UserHomeViewModel
     {
+        public UserHomeViewModel()
+        {
+            Courses = new List<Course>();
+        }
         public string UserName { get; set; }
         public string ImgPath { get; set; }
         public string Email { get; set; }
