@@ -1,0 +1,18 @@
+﻿@model iti_project.Models.Course
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="card">
+    <h4 class="card-header">@Model.Name</h4>
+    <div class="card-body">
+        <p class="card-text" style="font:bold; color: rebeccapurple">8 Chapters | 49 Videos | 5 hours </p>
+        <p class="card-text">@Model.Description</p>
+    </div>
+    <div class="card-footer">
+        @Html.ActionLink("Register", "Register", "Manage", routeValues: new { id = Model.ID }, htmlAttributes: new { @class = "btn btn-primary" })
+    </div>
+</div>
+
