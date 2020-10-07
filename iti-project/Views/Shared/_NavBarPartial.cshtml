@@ -1,4 +1,5 @@
-﻿<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+﻿@*@model iti_project.Models.DepartmentviewModel*@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/">ITI</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,11 +24,17 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
+                           
+                         @*   @foreach (var item in Model.Departments)
+                            {
+                                @Html.ActionLink(item.Name, "Details", "Departments", routeValues: new { id = item.ID }, htmlAttributes: new { @class = "dropdown-item" })
+                            }*@
+
+                               <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
                         </div>
                     </div>
                 <li class="nav-item ">

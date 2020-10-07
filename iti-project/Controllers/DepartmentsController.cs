@@ -12,7 +12,11 @@ namespace iti_project.Controllers
         ApplicationDbContext _context = new ApplicationDbContext();
         public ActionResult Index()
         {
-            return View(_context.Departments.ToList());
+            var model = new DepartmentviewModel
+            {
+                Departments = _context.Departments.ToList()
+            };
+            return View(model);
         }
 
 
@@ -21,10 +25,12 @@ namespace iti_project.Controllers
             if (id != null)
             {
                 var department = _context.Departments.Include(c => c.Courses).FirstOrDefault(c => c.ID == id);
-                if (department != null)
+                var model = new DepartmentviewModel
                 {
-                    return View(department);
-                }
+                    Department = department,
+                    Departments = _context.Departments.ToList()
+                };
+                return View(model);
             }
             return RedirectToAction("Index");
         }
