@@ -1,0 +1,46 @@
+﻿<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">ITI</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    @if (Request.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Home", "Index", "Account", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Home", "Index", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                    }
+                </li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        @Html.ActionLink("Departments", "Index", "Departments", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                        <a href="#" class="nav-link dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                <li class="nav-item ">
+                    @Html.ActionLink("Courses", "Index", "Courses", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                </li>
+            </ul>
+            @using (Html.BeginForm("Search", "Courses", FormMethod.Get, htmlAttributes: new { @class = "form-inline" }))
+            {
+                <input class="form-control mx-1" type="search" placeholder="Search" aria-label="Search" name="search_data">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            }
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</nav>
+
