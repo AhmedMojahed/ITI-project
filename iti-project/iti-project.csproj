@@ -184,10 +184,6 @@
     <Compile Include="Migrations\202010071459090_InitialModel.designer.cs">
       <DependentUpon>202010071459090_InitialModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202010071554500_PopulateDepartmentsData.cs" />
-    <Compile Include="Migrations\202010071554500_PopulateDepartmentsData.designer.cs">
-      <DependentUpon>202010071554500_PopulateDepartmentsData.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
@@ -385,9 +381,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202010071459090_InitialModel.resx">
       <DependentUpon>202010071459090_InitialModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010071554500_PopulateDepartmentsData.resx">
-      <DependentUpon>202010071554500_PopulateDepartmentsData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

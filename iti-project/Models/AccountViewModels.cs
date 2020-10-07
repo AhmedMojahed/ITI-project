@@ -69,7 +69,7 @@ namespace iti_project.Models
     {
         public UserHomeViewModel()
         {
-            Courses = new List<Course>();
+            this.Courses = new List<Course>();
         }
         public string UserName { get; set; }
         public string ImgPath { get; set; }

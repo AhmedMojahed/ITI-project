@@ -6,10 +6,7 @@ namespace iti_project.Models
 {
     public class Course
     {
-        public Course()
-        {
-            this.Users = new List<ApplicationUser>();
-        }
+
         public int ID { get; set; }
 
         [Required]

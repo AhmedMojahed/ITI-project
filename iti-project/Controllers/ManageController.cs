@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -373,20 +374,14 @@ namespace iti_project.Controllers
         {
             if (id != null)
             {
-                var user = UserManager.FindById(User.Identity.GetUserId());
+                var userId = User.Identity.GetUserId();
+                var user = _context.Users.Include("Courses").SingleOrDefault(u => u.Id == userId);
                 var course = _context.Courses.SingleOrDefault(c => c.ID == id);
-                if (course != null)
+                if (course != null && user != null)
                 {
                     user.Courses.Add(course);
-                    var result = UserManager.Update(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Account");
-                    }
-                    else
-                    {
-                        AddErrors(result);
-                    }
+                    _context.SaveChanges();
+                    return RedirectToAction("Index", "Account");
                 }
             }
             return RedirectToAction("Index", "Account");
@@ -396,21 +391,19 @@ namespace iti_project.Controllers
         {
             if (id != null)
             {
-                var user = UserManager.FindById(User.Identity.GetUserId());
-                var course = _context.Courses.SingleOrDefault(c => c.ID == id);
-                if (course != null)
+                if (id != null)
                 {
-                    user.Courses.Remove(course);
-                    var result = UserManager.Update(user);
-                    if (result.Succeeded)
+                    var userId = User.Identity.GetUserId();
+                    var user = _context.Users.Include("Courses").SingleOrDefault(u => u.Id == userId);
+                    var course = _context.Courses.SingleOrDefault(c => c.ID == id);
+                    if (course != null && user != null)
                     {
+                        user.Courses.Remove(course);
+                        _context.SaveChanges();
                         return RedirectToAction("Index", "Account");
                     }
-                    else
-                    {
-                        AddErrors(result);
-                    }
                 }
+                return RedirectToAction("Index", "Account");
 
             }
             return RedirectToAction("Index", "Account");

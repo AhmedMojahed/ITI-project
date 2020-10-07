@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -55,7 +57,9 @@ namespace iti_project.Controllers
 
         public ActionResult Index()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            ApplicationDbContext _context = new ApplicationDbContext();
+            var userId = User.Identity.GetUserId();
+            var user = _context.Users.Include("Courses").SingleOrDefault(u => u.Id == userId);
             if (user != null)
             {
                 var model = new UserHomeViewModel
@@ -64,8 +68,9 @@ namespace iti_project.Controllers
                     UserName = user.UserName,
                     ImgPath = user.ImgPath,
                     Email = user.Email,
-                    Courses = user.Courses.ToList()
+                    Courses = user.Courses
                 };
+
                 return View(model);
             }
             return RedirectToAction("Index", "Home");
@@ -184,7 +189,9 @@ namespace iti_project.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     ImgPath = "~/Content/src/img/index.png"
+
                 };
+                user.Courses = new List<Course>();
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

@@ -11,10 +11,7 @@ namespace iti_project.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-        public ApplicationUser()
-        {
-            this.Courses = new List<Course>();
-        }
+
         public string ImgPath { get; set; }
         public IList<Course> Courses { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -28,6 +25,7 @@ namespace iti_project.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
         public DbSet<Course> Courses { get; set; }
         public DbSet<Department> Departments { get; set; }
 
@@ -40,5 +38,6 @@ namespace iti_project.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }
