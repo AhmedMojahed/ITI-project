@@ -1,12 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+
+using iti_project.Models;
+
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using iti_project.Models;
 
 namespace iti_project.Controllers
 {
@@ -32,9 +33,9 @@ namespace iti_project.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -75,6 +76,7 @@ namespace iti_project.Controllers
             return View(model);
         }
 
+        #region Logins
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
@@ -98,6 +100,56 @@ namespace iti_project.Controllers
             }
             return RedirectToAction("ManageLogins", new { Message = message });
         }
+
+        //
+        // GET: /Manage/ManageLogins
+        public async Task<ActionResult> ManageLogins(ManageMessageId? message)
+        {
+            ViewBag.StatusMessage =
+                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
+                : message == ManageMessageId.Error ? "An error has occurred."
+                : "";
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return View("Error");
+            }
+            var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId());
+            var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
+            ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
+            return View(new ManageLoginsViewModel
+            {
+                CurrentLogins = userLogins,
+                OtherLogins = otherLogins
+            });
+        }
+
+        //
+        // POST: /Manage/LinkLogin
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LinkLogin(string provider)
+        {
+            // Request a redirect to the external login provider to link a login for the current user
+            return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
+        }
+
+        //
+        // GET: /Manage/LinkLoginCallback
+        public async Task<ActionResult> LinkLoginCallback()
+        {
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
+            if (loginInfo == null)
+            {
+                return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+            }
+            var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
+            return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+        }
+
+        #endregion
+
+        #region phoneNumber
 
         //
         // GET: /Manage/AddPhoneNumber
@@ -212,9 +264,12 @@ namespace iti_project.Controllers
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
+        #endregion
 
+        #region password
         //
         // GET: /Manage/ChangePassword
+        [HttpGet]
         public ActionResult ChangePassword()
         {
             return View();
@@ -276,51 +331,44 @@ namespace iti_project.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Manage/ManageLogins
-        public async Task<ActionResult> ManageLogins(ManageMessageId? message)
+        #endregion
+
+
+        #region Profile
+
+        //GET /Manage/ChangeName
+        [HttpGet]
+
+        public ActionResult ChangeUserName()
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : "";
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId());
-            var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
-            ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
-            return View(new ManageLoginsViewModel
-            {
-                CurrentLogins = userLogins,
-                OtherLogins = otherLogins
-            });
+            return View();
         }
 
-        //
-        // POST: /Manage/LinkLogin
+        //POST /Manage/ChangeName
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LinkLogin(string provider)
+        public async Task<ActionResult> ChangeUserName(ChangeUserNameViewModel model)
         {
-            // Request a redirect to the external login provider to link a login for the current user
-            return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (ModelState.IsValid)
+            {
+                if (model.UserName != null)
+                {
+                    user.UserName = model.UserName;
+                    var result = await UserManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
+                }
+            }
+            return View();
         }
 
-        //
-        // GET: /Manage/LinkLoginCallback
-        public async Task<ActionResult> LinkLoginCallback()
-        {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
-            if (loginInfo == null)
-            {
-                return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
-            }
-            var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
-            return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
-        }
+        #endregion
 
         protected override void Dispose(bool disposing)
         {
@@ -333,7 +381,7 @@ namespace iti_project.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -384,6 +432,6 @@ namespace iti_project.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

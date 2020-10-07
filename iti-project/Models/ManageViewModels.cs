@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -56,6 +57,13 @@ namespace iti_project.Models
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class ChangeUserNameViewModel
+    {
+        [Required]
+        [Display(Name = "New User Name")]
+        public string UserName { get; set; }
     }
 
     public class AddPhoneNumberViewModel

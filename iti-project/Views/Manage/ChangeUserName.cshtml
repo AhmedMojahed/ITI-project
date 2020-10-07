@@ -1,0 +1,23 @@
+﻿@model iti_project.Models.ChangeUserNameViewModel
+@{
+    ViewBag.Title = "Change User Name";
+}
+
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("ChangeUserName", "Manage", FormMethod.Post))
+{
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName)
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.UserName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Change User Name" class="btn btn-primary" />
+        </div>
+    </div>
+}

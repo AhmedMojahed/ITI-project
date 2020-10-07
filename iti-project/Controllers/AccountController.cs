@@ -172,7 +172,12 @@ namespace iti_project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    ImgPath = "~/Content/src/img/index.png"
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -184,7 +189,7 @@ namespace iti_project.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Account");
                 }
                 AddErrors(result);
             }
@@ -470,7 +475,7 @@ namespace iti_project.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Account");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
